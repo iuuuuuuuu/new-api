@@ -87,6 +87,16 @@ export function isWaffoPancakePayment(paymentType: string): boolean {
 }
 
 /**
+ * Check if payment method is Airwallex.
+ *
+ * Like Stripe, Airwallex returns a hosted checkout URL the browser opens
+ * directly — it is not submitted via the generic epay POST form.
+ */
+export function isAirwallexPayment(paymentType: string): boolean {
+  return paymentType === PAYMENT_TYPES.AIRWALLEX
+}
+
+/**
  * Get default payment type from topup info
  */
 export function getDefaultPaymentType(topupInfo: TopupInfo | null): string {

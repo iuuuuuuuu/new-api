@@ -108,3 +108,24 @@ func isEpayWebhookConfigured() bool {
 func isEpayWebhookEnabled() bool {
 	return isEpayTopUpEnabled()
 }
+
+// isAirwallexTopUpEnabled gates whether the Airwallex top-up endpoint is
+// exposed in /topup/info. Credentials must be present and compliance
+// confirmed; the webhook secret is also required because without it we
+// can't verify settlement callbacks.
+func isAirwallexTopUpEnabled() bool {
+	if !isPaymentComplianceConfirmed() {
+		return false
+	}
+	return strings.TrimSpace(setting.AirwallexClientId) != "" &&
+		strings.TrimSpace(setting.AirwallexApiKey) != "" &&
+		strings.TrimSpace(setting.AirwallexWebhookSecret) != ""
+}
+
+func isAirwallexWebhookConfigured() bool {
+	return strings.TrimSpace(setting.AirwallexWebhookSecret) != ""
+}
+
+func isAirwallexWebhookEnabled() bool {
+	return isAirwallexTopUpEnabled() && isAirwallexWebhookConfigured()
+}

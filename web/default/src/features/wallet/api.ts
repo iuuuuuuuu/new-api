@@ -28,6 +28,7 @@ import type {
   AmountResponse,
   PaymentResponse,
   StripePaymentResponse,
+  AirwallexPaymentResponse,
   AffiliateCodeResponse,
   AffiliateTransferResponse,
   BillingHistoryResponse,
@@ -115,6 +116,31 @@ export async function requestStripePayment(
   request: PaymentRequest
 ): Promise<StripePaymentResponse> {
   const res = await api.post('/api/user/stripe/pay', request, {
+    skipBusinessError: true,
+  } as Record<string, unknown>)
+  return res.data
+}
+
+/**
+ * Calculate payment amount for Airwallex payment
+ */
+export async function calculateAirwallexAmount(
+  request: AmountRequest
+): Promise<AmountResponse> {
+  const res = await api.post('/api/user/airwallex/amount', request, {
+    skipBusinessError: true,
+  } as Record<string, unknown>)
+  return res.data
+}
+
+/**
+ * Request Airwallex payment — server returns a hosted checkout URL
+ * (Payment Link) for the browser to open in a new tab.
+ */
+export async function requestAirwallexPayment(
+  request: PaymentRequest
+): Promise<AirwallexPaymentResponse> {
+  const res = await api.post('/api/user/airwallex/pay', request, {
     skipBusinessError: true,
   } as Record<string, unknown>)
   return res.data
